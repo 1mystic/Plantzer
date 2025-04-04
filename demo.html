@@ -1,0 +1,658 @@
+FRONTEND WORKING DATA DEMO 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Plant Grower</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        #app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content {
+            flex-grow: 1;
+        }
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+            background-color: #ffffff !important; /* Lighter navbar */
+        }
+        .navbar-brand img {
+             border-radius: 50%; /* Circular logo placeholder */
+        }
+        .footer {
+            background-color: #e9ecef;
+            padding: 1rem 0;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .search-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://placehold.co/1200x400/a2d2a2/333333?text=Grow+Anything') no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 6rem 1rem; /* Added horizontal padding */
+            text-align: center;
+        }
+        .search-hero h1 {
+            font-weight: bold;
+            color: #ffffff;
+        }
+         .search-hero .lead {
+            color: #e0e0e0;
+         }
+        .search-hero .form-control {
+            border: none; /* Cleaner search input */
+        }
+        .search-hero .btn-success {
+             background-color: #28a745; /* Keep Bootstrap green */
+             border: none;
+             transition: background-color 0.2s ease;
+        }
+        .search-hero .btn-success:hover {
+             background-color: #218838;
+        }
+
+        .plant-guide img.placeholder-graphic {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem; /* Slightly more rounded */
+            margin-bottom: 1.5rem; /* Increased spacing */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Updated Roadmap Styles */
+        .roadmap-card {
+            display: flex;
+            align-items: flex-start; /* Align items to the top */
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem; /* Rounded corners */
+            padding: 1.25rem; /* More padding */
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: box-shadow 0.2s ease-in-out;
+        }
+        .roadmap-card:hover {
+             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .roadmap-icon {
+            flex-shrink: 0;
+            width: 40px; /* Fixed icon width */
+            height: 40px;
+            margin-right: 1.25rem;
+            /* Optional: background for icon if needed */
+            /* background-color: #e9f5ea; */
+            /* border-radius: 50%; */
+            /* display: flex; */
+            /* align-items: center; */
+            /* justify-content: center; */
+        }
+         .roadmap-icon img {
+            width: 100%;
+            height: 100%;
+            /* filter: invert(40%) sepia(80%) saturate(1500%) hue-rotate(100deg) brightness(95%) contrast(90%); */ /* Example to colorize icon green */
+         }
+
+        .roadmap-content h5 {
+            margin-bottom: 0.3rem; /* Reduced margin */
+            font-weight: bold;
+            color: #343a40;
+        }
+        .roadmap-content p {
+            margin-bottom: 0;
+            color: #495057;
+            line-height: 1.6;
+        }
+
+         /* Basic Needs Card */
+         .needs-card .card-header {
+             background-color: #198754; /* Keep green header */
+             color: white;
+             border-bottom: none;
+             border-top-left-radius: 0.5rem;
+             border-top-right-radius: 0.5rem;
+         }
+         .needs-card .list-group-item {
+             border-color: #e9ecef; /* Lighter borders */
+             padding: 0.8rem 1.25rem;
+         }
+          .needs-card .list-group-item strong {
+             color: #495057;
+          }
+
+         /* Description Card */
+         .description-card .card-body {
+             padding: 1.25rem;
+         }
+          .description-card .card-title {
+             font-weight: bold;
+             color: #343a40;
+             margin-bottom: 0.75rem;
+          }
+
+         /* Local Advice Card */
+         .advice-card .card-header {
+             background-color: #f8f9fa; /* Light header */
+             border-bottom: 1px solid #dee2e6;
+         }
+          .advice-card .card-title {
+             font-weight: bold;
+             color: #343a40;
+             margin-bottom: 0;
+          }
+         .advice-card .card-body {
+             padding: 1.25rem;
+         }
+         .advice-card .list-unstyled li img {
+             opacity: 0.7;
+         }
+
+
+        /* Loading Spinner */
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        /* Ensure footer stays at the bottom */
+         html, body {
+            height: 100%;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.prod.js"></script>
+    <script src="https://unpkg.com/vuex@4/dist/vuex.global.prod.js"></script>
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="#">
+                    <img src="https://placehold.co/30x30/28a745/ffffff?text=🌿" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
+                    Smart Grower
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <router-link to="/" class="nav-link" active-class="active">Home</router-link>
+                        </li>
+                        </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <router-view></router-view> </main>
+
+        <footer class="footer text-center mt-auto">
+            <div class="container">
+                <span>© {{ new Date().getFullYear() }} Smart Plant Grower. All rights reserved.</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        const { createApp } = Vue;
+        const { createRouter, createWebHashHistory } = VueRouter;
+        const { createStore } = Vuex;
+
+        // --- Placeholder API Functions ---
+        // Replace these with actual calls to your backend/plant API/weather API
+
+        // Simulates fetching plant search results
+        async function searchPlantsAPI(query) {
+            console.log(`API: Searching for "${query}"...`);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            if (query.toLowerCase().includes("tomato")) {
+                return [
+                    { id: 'solanum-lycopersicum', name: 'Tomato (Solanum lycopersicum)', snippet: 'Popular fruit, needs sun and regular watering.' },
+                    { id: 'physalis-philadelphica', name: 'Tomatillo (Physalis philadelphica)', snippet: 'Related to tomato, used in Mexican cuisine.' }
+                ];
+            } else if (query.toLowerCase().includes("basil")) {
+                 return [
+                    { id: 'ocimum-basilicum', name: 'Basil (Ocimum basilicum)', snippet: 'Aromatic herb, loves warmth and sun.' }
+                ];
+            }
+            return [];
+        }
+
+        // Simulates fetching detailed plant guide data
+        async function getPlantDetailsAPI(plantId) {
+            console.log(`API: Fetching details for "${plantId}"...`);
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            // **REPLACE WITH ACTUAL API CALL to your backend (e.g., /api/plant/${plantId})**
+            if (plantId === 'solanum-lycopersicum') {
+                return {
+                    id: 'solanum-lycopersicum',
+                    name: 'Tomato (Solanum lycopersicum)',
+                    description: 'Tomatoes are a widely cultivated fruit, botanically classified as berries. They are typically red when ripe, but can come in various colors like yellow, orange, green, and purple. Native to South America, they are now grown worldwide.',
+                    imageUrl: 'https://placehold.co/600x400/e74c3c/ffffff?text=Tomato+Plant',
+                    // Updated roadmap with icons
+                    roadmap: [
+                        { stage: 'Germination (1-2 weeks)', details: 'Sow seeds indoors 6-8 weeks before last frost. Keep soil moist and warm (70-80°F / 21-27°C). Provide light once seedlings emerge.', icon: 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/seedling.svg' },
+                        { stage: 'Transplanting (2-3 weeks post-germination)', details: 'Once seedlings have true leaves and risk of frost has passed, transplant outdoors or to larger pots. Harden off seedlings gradually.', icon: 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/move-up.svg' }, // Using move-up as placeholder
+                        { stage: 'Vegetative Growth (4-6 weeks)', details: 'Provide full sun (6-8 hours). Water regularly, keeping soil consistently moist but not waterlogged. Start fertilizing with balanced fertilizer.', icon: 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/sprout.svg' },
+                        { stage: 'Flowering & Fruiting (Ongoing)', details: 'Support plants with stakes or cages. Continue watering and fertilizing (switch to higher potassium fertilizer). Pollination is needed for fruit set (usually by wind/insects).', icon: 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/flower-2.svg' },
+                        { stage: 'Harvesting (60-90 days from transplant)', details: 'Harvest fruits when they reach desired color and size. Regular harvesting encourages more production.', icon: 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shopping-basket.svg' }
+                    ],
+                    needs: {
+                        light: 'Full Sun (6-8+ hours/day)',
+                        watering: 'Consistent moisture, water deeply 1-2 times/week depending on weather',
+                        soil: 'Well-draining, fertile loam (pH 6.0-6.8)',
+                        temperature: 'Warm season crop (Ideal: 70-85°F / 21-29°C)',
+                        fertilizing: 'Regular feeding required, balanced then high-potassium'
+                    }
+                };
+            } else if (plantId === 'ocimum-basilicum') {
+                 return {
+                    id: 'ocimum-basilicum',
+                    name: 'Basil (Ocimum basilicum)',
+                    description: 'Basil is a popular culinary herb known for its aromatic leaves. It belongs to the mint family and is native to tropical regions from central Africa to Southeast Asia.',
+                    imageUrl: 'https://placehold.co/600x400/2ecc71/ffffff?text=Basil+Plant',
+                    roadmap: [
+                        { stage: 'Germination (5-10 days)', details: 'Sow seeds indoors or directly outdoors after frost. Keep soil moist and warm (70°F / 21°C). Needs light to germinate.', icon: 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/seedling.svg' },
+                        { stage: 'Growth (4-6 weeks)', details: 'Provide full sun (6+ hours). Water regularly. Pinch back tips to encourage bushy growth.', icon: 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/leaf.svg' },
+                        { stage: 'Harvesting (Ongoing)', details: 'Harvest leaves regularly by snipping stems just above a leaf pair. Remove flower stalks to prolong leaf production.', icon: 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/scissors.svg' } // Using scissors for harvesting
+                    ],
+                     needs: {
+                        light: 'Full Sun (6+ hours/day)',
+                        watering: 'Keep soil consistently moist',
+                        soil: 'Rich, well-draining soil (pH 6.0-7.0)',
+                        temperature: 'Loves heat (Ideal: 70-85°F / 21-29°C)',
+                        fertilizing: 'Occasional feeding with balanced liquid fertilizer'
+                    }
+                };
+            }
+            throw new Error("Plant details not found.");
+        }
+
+        // Simulates fetching local advice based on location and plant type
+        async function getLocalAdviceAPI(plantId, lat, lon) {
+            console.log(`API: Fetching local advice for "${plantId}" at ${lat}, ${lon}`);
+            await new Promise(resolve => setTimeout(resolve, 600));
+
+            // **REPLACE WITH ACTUAL API CALL to your backend (e.g., /api/advice)**
+            let advice = [];
+            if (plantId === 'solanum-lycopersicum') {
+                advice.push("Based on typical conditions for your area, ensure tomatoes get maximum sun exposure.");
+                const simulatedTemp = 28; // Example temperature in °C
+                if (simulatedTemp > 32) {
+                    advice.push("Weather Alert: High temperatures expected. Consider providing afternoon shade and ensure consistent watering to prevent stress.");
+                } else {
+                    advice.push("Weather looks favorable for tomato growth this week.");
+                }
+                 advice.push("Water deeply in the morning to minimize evaporation.");
+            } else {
+                advice.push("General advice: Monitor local weather forecasts and adjust watering accordingly.");
+            }
+            advice.push(`(Note: Advice based on general data for location ${lat.toFixed(2)}, ${lon.toFixed(2)} - Replace with real-time weather integration)`);
+
+            return advice;
+        }
+
+        // --- Vuex Store ---
+        const store = createStore({
+            state() {
+                return {
+                    searchResults: [],
+                    currentPlant: null,
+                    isLoading: false,
+                    error: null,
+                    userLocation: null, // { latitude: number, longitude: number }
+                    localAdvice: []
+                }
+            },
+            mutations: {
+                SET_SEARCH_RESULTS(state, results) { state.searchResults = results; },
+                SET_CURRENT_PLANT(state, plantData) { state.currentPlant = plantData; },
+                SET_LOADING(state, isLoading) { state.isLoading = isLoading; },
+                SET_ERROR(state, error) { state.error = error; },
+                SET_USER_LOCATION(state, location) { state.userLocation = location; },
+                SET_LOCAL_ADVICE(state, advice) { state.localAdvice = advice; },
+                CLEAR_PLANT_DATA(state) {
+                    state.currentPlant = null;
+                    state.localAdvice = [];
+                    state.error = null;
+                }
+            },
+            actions: {
+                async searchPlant({ commit }, query) {
+                    commit('SET_LOADING', true);
+                    commit('SET_ERROR', null);
+                    commit('SET_SEARCH_RESULTS', []);
+                    try {
+                        const results = await searchPlantsAPI(query);
+                        commit('SET_SEARCH_RESULTS', results);
+                    } catch (err) {
+                        console.error("Search Error:", err);
+                        commit('SET_ERROR', 'Failed to search for plants. Please try again.');
+                    } finally {
+                        commit('SET_LOADING', false);
+                    }
+                },
+                async fetchPlantDetails({ commit, dispatch, state }, plantId) {
+                    commit('CLEAR_PLANT_DATA');
+                    commit('SET_LOADING', true);
+                    try {
+                        const plantData = await getPlantDetailsAPI(plantId);
+                        commit('SET_CURRENT_PLANT', plantData);
+                        if (state.userLocation) {
+                            dispatch('fetchLocalAdvice', plantId);
+                        }
+                    } catch (err) {
+                        console.error("Fetch Details Error:", err);
+                        commit('SET_ERROR', `Failed to load details for ${plantId}. ${err.message}`);
+                        commit('SET_CURRENT_PLANT', null);
+                    } finally {
+                         if (!state.userLocation) {
+                             commit('SET_LOADING', false);
+                         }
+                    }
+                },
+                getUserLocation({ commit }) {
+                    if (!navigator.geolocation) {
+                        // Non-blocking error for geolocation feature absence
+                        console.warn('Geolocation is not supported by this browser.');
+                        return;
+                    }
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const location = {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            };
+                            console.log("Location obtained:", location);
+                            commit('SET_USER_LOCATION', location);
+                        },
+                        (error) => {
+                            console.error("Geolocation Error:", error);
+                            let message = 'Could not get location for local advice. ';
+                            if (error.code === error.PERMISSION_DENIED) {
+                                message += 'Permission denied.';
+                            } else {
+                                message += 'Please ensure location services are enabled.';
+                            }
+                             commit('SET_USER_LOCATION', null);
+                             // Store a specific location error message if needed, or just log it
+                             console.warn("Geolocation Error Message:", message);
+                             // Maybe set a specific state property like state.locationError = message
+                        }
+                    );
+                },
+                async fetchLocalAdvice({ commit, state }, plantId) {
+                    if (!state.userLocation || !plantId) {
+                        console.log("Skipping local advice fetch: No location or plant ID.");
+                        commit('SET_LOADING', false);
+                        return;
+                    }
+                    commit('SET_LOADING', true);
+                    commit('SET_LOCAL_ADVICE', []);
+                    try {
+                        const advice = await getLocalAdviceAPI(plantId, state.userLocation.latitude, state.userLocation.longitude);
+                        commit('SET_LOCAL_ADVICE', advice);
+                    } catch (err) {
+                        console.error("Fetch Local Advice Error:", err);
+                        commit('SET_ERROR', (state.error ? state.error + ' ' : '') + 'Failed to fetch local advice.');
+                    } finally {
+                        commit('SET_LOADING', false);
+                    }
+                }
+            }
+        });
+
+        // --- Vue Components ---
+
+        // Home Component (Landing Page)
+        const Home = {
+            template: `
+                <div>
+                    <div class="search-hero">
+                        <div class="container">
+                            <h1 class="display-4 mb-4">Grow Smarter</h1>
+                            <p class="lead mb-4">Enter a plant name to get a detailed growing guide tailored for you.</p>
+                            <form @submit.prevent="performSearch" class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-lg mb-3 shadow-sm">
+                                        <input type="text" v-model="searchQuery" class="form-control" placeholder="E.g., Tomato, Basil, Rose..." aria-label="Plant name" required>
+                                        <button class="btn btn-success px-4" type="submit" :disabled="isLoading"> <span v-if="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            <span v-else>Search</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                             <div v-if="error" class="alert alert-danger mt-3 col-md-6 mx-auto">{{ error }}</div>
+                        </div>
+                    </div>
+
+                    <div class="container mt-5 mb-5"> <div v-if="!isLoading && searchResults.length > 0">
+                            <h2 class="mb-4 text-center">Search Results:</h2> <div class="list-group col-md-8 mx-auto"> <router-link v-for="plant in searchResults" :key="plant.id" :to="'/plant/' + plant.id" class="list-group-item list-group-item-action mb-2 rounded shadow-sm"> <h5 class="mb-1">{{ plant.name }}</h5>
+                                    <p class="mb-1 text-muted">{{ plant.snippet }}</p> </router-link>
+                            </div>
+                        </div>
+                         <div v-else-if="!isLoading && submittedSearch && searchResults.length === 0" class="text-center text-muted mt-4">
+                            No plants found matching your search.
+                        </div>
+                    </div>
+                </div>
+            `,
+            data() {
+                return { searchQuery: '', submittedSearch: false };
+            },
+            computed: {
+                isLoading() { return this.$store.state.isLoading; },
+                searchResults() { return this.$store.state.searchResults; },
+                error() { return this.$store.state.error && this.$store.state.error.includes("search") ? this.$store.state.error : null; }
+            },
+            methods: {
+                performSearch() {
+                    if (this.searchQuery.trim()) {
+                        this.submittedSearch = true;
+                        this.$store.dispatch('searchPlant', this.searchQuery.trim());
+                    }
+                }
+            },
+            mounted() {
+                this.$store.commit('SET_SEARCH_RESULTS', []);
+                this.$store.commit('SET_ERROR', null);
+                this.submittedSearch = false;
+            }
+        };
+
+        // Plant Guide Component
+        const PlantGuide = {
+            template: `
+                <div class="container my-5 plant-guide"> <div v-if="isLoading && !plant" class="d-flex justify-content-center my-5">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div v-else-if="error && !isLoading" class="alert alert-danger">
+                        {{ error }} <router-link to="/">Go back home</router-link>
+                    </div>
+                    <div v-else-if="plant">
+                        <h1 class="mb-4 text-center">{{ plant.name }}</h1> <div class="row">
+                            <div class="col-lg-5 mb-4">
+                                <img :src="plant.imageUrl || 'https://placehold.co/600x400/cccccc/ffffff?text=Image+Not+Available'"
+                                     :alt="'Image of ' + plant.name"
+                                     class="img-fluid rounded shadow-sm mb-4 placeholder-graphic"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/cccccc/ffffff?text=Image+Error';">
+
+                                <div class="card mb-4 needs-card shadow-sm">
+                                    <div class="card-header">
+                                        <h5 class="mb-0 d-flex align-items-center">
+                                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/list-checks.svg" alt="Needs icon" width="20" height="20" class="me-2">
+                                            Basic Needs
+                                         </h5>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex align-items-center"><img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/sun.svg" alt="Light" width="18" height="18" class="me-2 opacity-75"> <strong>Light:</strong><span class="ms-1">{{ plant.needs?.light || 'N/A' }}</span></li>
+                                        <li class="list-group-item d-flex align-items-center"><img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/droplet.svg" alt="Water" width="18" height="18" class="me-2 opacity-75"> <strong>Watering:</strong><span class="ms-1">{{ plant.needs?.watering || 'N/A' }}</span></li>
+                                        <li class="list-group-item d-flex align-items-center"><img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shovel.svg" alt="Soil" width="18" height="18" class="me-2 opacity-75"> <strong>Soil:</strong><span class="ms-1">{{ plant.needs?.soil || 'N/A' }}</span></li>
+                                        <li class="list-group-item d-flex align-items-center"><img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/thermometer.svg" alt="Temp" width="18" height="18" class="me-2 opacity-75"> <strong>Temperature:</strong><span class="ms-1">{{ plant.needs?.temperature || 'N/A' }}</span></li>
+                                        <li class="list-group-item d-flex align-items-center"><img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/package-plus.svg" alt="Fertilizer" width="18" height="18" class="me-2 opacity-75"> <strong>Fertilizing:</strong><span class="ms-1">{{ plant.needs?.fertilizing || 'N/A' }}</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-7">
+                                <div class="card mb-4 description-card shadow-sm">
+                                     <div class="card-body">
+                                        <h4 class="card-title d-flex align-items-center">
+                                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/info.svg" alt="Info" width="20" height="20" class="me-2">
+                                            Description
+                                        </h4>
+                                        <p>{{ plant.description || 'No description available.' }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <h4 class="mb-3 d-flex align-items-center">
+                                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/map.svg" alt="Roadmap" width="20" height="20" class="me-2">
+                                        Growing Roadmap
+                                    </h4>
+                                    <div v-if="plant.roadmap && plant.roadmap.length > 0">
+                                        <div v-for="(step, index) in plant.roadmap" :key="index" class="roadmap-card">
+                                            <div class="roadmap-icon">
+                                                 <img :src="step.icon || 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg'" :alt="step.stage + ' icon'">
+                                            </div>
+                                            <div class="roadmap-content">
+                                                <h5>{{ step.stage }}</h5>
+                                                <p>{{ step.details }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p v-else class="text-muted">No roadmap details available.</p>
+                                </div>
+
+                                <div class="card mb-4 advice-card shadow-sm">
+                                     <div class="card-header">
+                                        <h4 class="card-title d-flex align-items-center">
+                                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/map-pin.svg" alt="Location" width="20" height="20" class="me-2">
+                                            Local Advice {{ userLocation ? '(' + userLocation.latitude.toFixed(2) + ', ' + userLocation.longitude.toFixed(2) + ')' : '(Location N/A)' }}
+                                        </h4>
+                                    </div>
+                                     <div class="card-body">
+                                         <div v-if="isLoading && userLocation && localAdvice.length === 0" class="text-center text-muted"> <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+                                             <span class="ms-2">Fetching local advice...</span>
+                                         </div>
+                                         <div v-else-if="localAdvice.length > 0">
+                                             <ul class="list-unstyled">
+                                                 <li v-for="(advice, index) in localAdvice" :key="index" class="mb-2 d-flex align-items-start">
+                                                     <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cloud-sun.svg" alt="Weather icon" width="18" height="18" class="me-2 mt-1 flex-shrink-0">
+                                                     <span>{{ advice }}</span>
+                                                 </li>
+                                             </ul>
+                                         </div>
+                                         <p v-else-if="!userLocation && !locationErrorMsg" class="text-muted">
+                                             Enable location services in your browser to get tailored advice for your area.
+                                         </p>
+                                          <p v-else-if="locationErrorMsg" class="text-danger">
+                                             <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/alert-triangle.svg" alt="Warning icon" width="16" height="16" class="me-1" style="margin-top: -3px;">
+                                             {{ locationErrorMsg }}
+                                         </p>
+                                         <p v-else class="text-muted">No specific local advice available at this time.</p>
+                                     </div>
+                                </div>
+
+                            </div>
+                        </div>
+                         <div class="text-center"> <router-link to="/" class="btn btn-outline-secondary mt-3">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-left.svg" alt="Back icon" width="16" height="16" class="me-1" style="margin-top: -3px;">
+                                Back to Search
+                             </router-link>
+                         </div>
+                    </div>
+                     <div v-else-if="!isLoading && !error" class="alert alert-warning">
+                        Plant data not found. <router-link to="/">Go back home</router-link>
+                    </div>
+                </div>
+            `,
+            computed: {
+                plant() { return this.$store.state.currentPlant; },
+                isLoading() { return this.$store.state.isLoading; },
+                error() { return this.$store.state.error && !this.$store.state.error.includes("search") ? this.$store.state.error : null; },
+                userLocation() { return this.$store.state.userLocation; },
+                localAdvice() { return this.$store.state.localAdvice; },
+                locationErrorMsg() {
+                    // Placeholder for a dedicated location error state if you add one to Vuex
+                    // Example: return this.$store.state.locationError;
+                    // For now, just checking the generic error message for keywords
+                    if (!this.userLocation && this.$store.state.error && (this.$store.state.error.includes('location') || this.$store.state.error.includes('Geolocation'))) {
+                        return this.$store.state.error;
+                    }
+                     // Check console warning message if needed (less ideal)
+                    return null;
+                 }
+            },
+            methods: {
+                fetchData() {
+                    const plantId = this.$route.params.id;
+                    if (plantId) {
+                         this.$store.dispatch('fetchPlantDetails', plantId);
+                    } else {
+                        // This case should ideally not happen with the current routing
+                        this.$store.commit('SET_ERROR', 'No plant ID specified.');
+                        this.$store.commit('CLEAR_PLANT_DATA');
+                        this.$store.commit('SET_LOADING', false);
+                    }
+                }
+            },
+            created() {
+                this.fetchData();
+            },
+            watch: {
+                '$route.params.id'(newId, oldId) {
+                    if (newId && newId !== oldId) {
+                        this.fetchData();
+                    }
+                }
+            }
+        };
+
+        // --- Vue Router ---
+        const routes = [
+            { path: '/', component: Home, name: 'home' },
+            { path: '/plant/:id', component: PlantGuide, name: 'plant-guide' }
+        ];
+
+        const router = createRouter({
+            history: createWebHashHistory(),
+            routes,
+             // Scroll to top on route change
+             scrollBehavior(to, from, savedPosition) {
+                if (savedPosition) {
+                return savedPosition;
+                } else {
+                return { top: 0 };
+                }
+            }
+        });
+
+        // --- Vue App Initialization ---
+        const app = createApp({
+             mounted() {
+                this.$store.dispatch('getUserLocation');
+            }
+        });
+
+        app.use(router);
+        app.use(store);
+        app.mount('#app');
+
+    </script>
+</body>
+</html>

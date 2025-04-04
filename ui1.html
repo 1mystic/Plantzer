@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlantCare - Grow Boldly</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/Lucide.css">
+    <style>
+        /* Apply Poppins font */
+        body {
+            font-family: 'Poppins', sans-serif; /* Default to Poppins */
+        }
+        /* Custom class for the very bold text */
+        .font-black {
+            font-weight: 900;
+        }
+        /* Ensure gradient covers full height */
+        html, body {
+            /* height: 100%; */ /* Removed to allow content flow */
+            margin: 0;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        /* Style for the main heading to give it presence */
+        .hero-text {
+            font-size: clamp(4rem, 15vw, 12rem); /* Responsive font size */
+            line-height: 0.9; /* Tight line height */
+            color: rgba(255, 255, 255, 0.6); /* Semi-transparent white */
+            mix-blend-mode: overlay; /* Blend with background/image */
+            user-select: none; /* Prevent text selection */
+            /* Position adjustment might be needed depending on final layout */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+         /* Style for the plant image */
+        .plant-image {
+            filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.25)); /* Softer shadow */
+            max-height: 60vh; /* Adjusted max-height */
+            width: auto;
+            max-width: 90%; /* Ensure image doesn't overflow */
+            margin-top: 15vh; /* Add some top margin to push image down slightly */
+        }
+
+        /* Add basic styling for new sections if not using Tailwind extensively */
+        .features-section, .search-section {
+             padding: 4rem 1rem; /* Equivalent to py-16 px-4 */
+             text-align: center;
+        }
+         .features-grid {
+            display: grid;
+            gap: 2rem; /* gap-8 */
+            max-width: 1152px; /* max-w-6xl */
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 2rem; /* mt-8 */
+         }
+         @media (min-width: 768px) { /* md: */
+            .features-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } /* grid-cols-2 */
+         }
+         @media (min-width: 1024px) { /* lg: */
+            .features-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } /* grid-cols-3 */
+         }
+         .feature-item {
+            background-color: rgba(255, 255, 255, 0.6); /* white alpha */
+            backdrop-filter: blur(5px); /* backdrop-blur-sm */
+            padding: 1.5rem; /* p-6 */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-md */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+         }
+         .feature-item i {
+            font-size: 2.25rem; /* text-4xl */
+            color: #059669; /* text-emerald-600 */
+            margin-bottom: 1rem; /* mb-4 */
+         }
+         .feature-item h3 {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 0.5rem; /* mb-2 */
+            color: #334155; /* text-slate-700 */
+         }
+         .feature-item p {
+             color: #475569; /* text-slate-600 */
+             font-size: 0.9rem; /* Slightly smaller text */
+             line-height: 1.5;
+         }
+
+         .search-container {
+            display: flex;
+            flex-direction: column; /* Default mobile */
+            gap: 0.5rem; /* gap-2 */
+            max-width: 42rem; /* max-w-lg */
+            margin: 2rem auto 0 auto; /* mt-8 mx-auto */
+         }
+          @media (min-width: 640px) { /* sm: */
+            .search-container { flex-direction: row; } /* flex-row */
+          }
+
+         .search-input {
+            padding: 0.75rem 1rem; /* py-3 px-4 */
+            border: 1px solid #cbd5e1; /* border-slate-300 */
+            border-radius: 9999px; /* rounded-full */
+            width: 100%; /* w-full */
+            flex-grow: 1; /* Allow input to grow */
+         }
+          @media (min-width: 640px) { /* sm: */
+             .search-input { border-top-right-radius: 0; border-bottom-right-radius: 0; } /* sm:rounded-r-none */
+          }
+          .search-input:focus {
+             outline: 2px solid transparent;
+             outline-offset: 2px;
+             border-color: #10b981; /* focus:border-emerald-500 */
+             box-shadow: 0 0 0 2px #a7f3d0; /* focus:ring-2 focus:ring-emerald-300 */
+          }
+
+         .search-button {
+             background-color: #059669; /* bg-emerald-600 */
+             color: white;
+             font-weight: 700; /* font-bold */
+             padding: 0.75rem 1.5rem; /* py-3 px-6 */
+             border-radius: 9999px; /* rounded-full */
+             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow */
+             transition: background-color 0.3s ease;
+             display: inline-flex; /* To align icon */
+             align-items: center;
+             justify-content: center; /* Center text/icon */
+             gap: 0.5rem; /* gap-2 */
+             width: 100%; /* Full width on mobile */
+         }
+         @media (min-width: 640px) { /* sm: */
+            .search-button {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0; /* sm:rounded-l-none */
+                width: auto; /* Auto width on larger screens */
+            }
+         }
+         .search-button:hover {
+             background-color: #047857; /* hover:bg-emerald-700 */
+         }
+         .search-button i {
+            font-size: 1.1rem; /* Adjust icon size if needed */
+         }
+
+    </style>
+</head>
+ 
+<body class="bg-gradient-to-br from-emerald-200 via-cyan-200 to-teal-300 min-h-screen p-4 text-slate-800">
+
+   
+    <div class="relative w-full max-w-7xl mx-auto flex flex-col items-center justify-start text-center overflow-hidden pt-10 pb-16"> 
+
+        <h1 class="hero-text font-black absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+            GROW
+        </h1>
+
+        <div class="relative z-20 mb-8 flex justify-center">
+             <img src="https://www.istockphoto.com/photos/sapling-with-out-of-focus-garden"
+                 alt="Lush green sapling growing"
+                 class="plant-image rounded-lg object-contain"
+                 onerror="this.onerror=null; this.src='https://placehold.co/600x700/e2e8f0/94a3b8?text=Image+Not+Found';">
+        </div>
+
+        <div class="relative z-30 flex flex-col items-center gap-4 px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-800 drop-shadow-sm">
+                Your Personal Plant Guide
+            </h2>
+            <p class="text-md md:text-lg text-slate-600 max-w-md">
+                Get tailored advice and step-by-step guides to help your specific plants thrive.
+            </p>
+            <button class="mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2">
+                Find Your Plant
+                <i class="lucide lucide-arrow-right text-xl"></i>
+            </button>
+        </div>
+
+    </div>
+
+    
+    <section id="features" class="features-section max-w-6xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-12">Key Features</h2>
+        <div class="features-grid">
+           
+            <div class="feature-item">
+                <i class="lucide lucide-leaf"></i>
+                <h3>Plant Identification</h3>
+                <p>Easily identify any plant with our advanced image recognition.</p>
+            </div>
+            
+            <div class="feature-item">
+                <i class="lucide lucide-drop"></i>
+                <h3>Care Guides</h3>
+                <p>Get detailed instructions on watering, sunlight, and soil for your plants.</p>
+            </div>
+           
+            <div class="feature-item">
+                <i class="lucide lucide-thermometer"></i>
+                <h3>Environment Check</h3>
+                <p>Find out the ideal temperature and humidity for your plant's health.</p>
+            </div>
+          
+            <div class="feature-item">
+                <i class="lucide lucide-bug"></i>
+                <h3>Pest & Disease Detection</h3>
+                <p>Identify common plant problems and get solutions to treat them.</p>
+            </div>
+           
+            <div class="feature-item">
+                <i class="lucide lucide-calendar"></i>
+                <h3>Reminders & Schedules</h3>
+                <p>Set up reminders for watering, fertilizing, and other care tasks.</p>
+            </div>
+           
+            <div class="feature-item">
+                <i class="lucide lucide-users"></i> 
+                <h3>Community Support</h3>
+                <p>Connect with other plant lovers and share your growing journey.</p>
+            </div>
+        </div>
+    </section>
+ 
+
+
+  
+    <section class="search-section max-w-4xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Ready to Grow Boldly?</h2>
+        <p class="text-lg text-slate-600 mb-8">Search for your plant and start your journey today!</p>
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Enter your plant's name">
+            <button class="search-button">
+                <i class="lucide lucide-search"></i> Search
+            </button>
+        </div>
+    </section>
+  
+
+</body>
+</html>

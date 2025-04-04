@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Plant Grower</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons (Optional but nice for UI) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-green: #28a745;
+            --light-green-bg: #e9f5ea;
+            --dark-text: #343a40;
+            --medium-text: #495057;
+            --light-text: #6c757d;
+            --border-color: #dee2e6;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--medium-text);
+        }
+        #app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content {
+            flex-grow: 1;
+        }
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+            background-color: var(--white) !important;
+        }
+        .navbar-brand img {
+             border-radius: 50%;
+        }
+         .navbar-brand .brand-text {
+            font-weight: 700;
+            color: var(--dark-text);
+         }
+        .footer {
+            background-color: #e9ecef;
+            padding: 1.5rem 0;
+            font-size: 0.9rem;
+            color: var(--light-text);
+            border-top: 1px solid var(--border-color);
+        }
+        .search-hero {
+            /* Subtle gradient over placeholder */
+            background: linear-gradient(rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.1)), url('https://placehold.co/1200x400/a2d2a2/ffffff?text=Find+Your+Plant') no-repeat center center;
+            background-size: cover;
+            color: var(--dark-text); /* Darker text on light bg */
+            padding: 6rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .search-hero h1 {
+            font-weight: bold;
+            color: var(--dark-text);
+        }
+         .search-hero .lead {
+            color: var(--medium-text);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+         }
+        .search-hero .form-control {
+            border-radius: 0.375rem 0 0 0.375rem; /* Match button */
+            border: 1px solid var(--border-color);
+        }
+        .search-hero .btn-success {
+             background-color: var(--primary-green);
+             border: 1px solid var(--primary-green);
+             border-radius: 0 0.375rem 0.375rem 0;
+             transition: background-color 0.2s ease, border-color 0.2s ease;
+             padding: 0.75rem 1.5rem; /* Larger button */
+        }
+        .search-hero .btn-success:hover {
+             background-color: #218838;
+             border-color: #1e7e34;
+        }
+         .search-results-container {
+             max-width: 800px;
+             margin-left: auto;
+             margin-right: auto;
+         }
+         .search-results-container .list-group-item {
+             transition: background-color 0.15s ease-in-out;
+             border: 1px solid var(--border-color);
+             border-radius: 0.5rem !important; /* Override BS */
+         }
+         .search-results-container .list-group-item:hover {
+             background-color: var(--light-bg);
+         }
+         .search-results-container .list-group-item h5 {
+             color: var(--primary-green);
+             font-weight: 700;
+         }
+
+        /* Plant Guide Specific */
+         .plant-guide .main-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+         }
+
+        /* Shared Card Style */
+        .info-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem; /* More rounded */
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .info-card .card-title-icon {
+            color: var(--primary-green);
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+        .info-card h4, .info-card h5 {
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.75rem; /* Consistent spacing */
+             display: flex;
+             align-items: center;
+        }
+
+        /* Needs Card */
+         .needs-list li {
+             padding: 0.6rem 0;
+             border-bottom: 1px solid #eee; /* Lighter separator */
+             display: flex;
+             align-items: center;
+         }
+         .needs-list li:last-child {
+             border-bottom: none;
+         }
+         .needs-list strong {
+             color: var(--medium-text);
+             width: 100px; /* Align labels */
+             flex-shrink: 0;
+             margin-right: 0.5rem;
+         }
+         .needs-list .icon {
+             margin-right: 0.8rem;
+             opacity: 0.7;
+             flex-shrink: 0;
+             color: var(--primary-green);
+         }
+
+         /* Description Card */
+          .description-card p {
+             line-height: 1.7;
+             color: var(--medium-text);
+          }
+
+         /* Roadmap Styles */
+         .roadmap-card {
+            display: flex;
+            align-items: flex-start;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: box-shadow 0.2s ease-in-out;
+         }
+         .roadmap-card:hover {
+             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+         }
+         .roadmap-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            margin-right: 1.25rem;
+            color: var(--primary-green); /* Use theme color */
+            background-color: var(--light-green-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+         }
+         .roadmap-content h5 {
+            margin-bottom: 0.3rem;
+            font-weight: bold;
+            color: var(--dark-text);
+         }
+         .roadmap-content p {
+            margin-bottom: 0;
+            color: var(--medium-text);
+            line-height: 1.6;
+         }
+
+         /* Local Advice Card */
+         .advice-card ul {
+             list-style: none;
+             padding-left: 0;
+         }
+         .advice-card li {
+             display: flex;
+             align-items: flex-start;
+             margin-bottom: 0.8rem;
+             color: var(--medium-text);
+             line-height: 1.6;
+         }
+         .advice-card .icon {
+             margin-right: 0.8rem;
+             margin-top: 4px; /* Align icon better with text */
+             flex-shrink: 0;
+             opacity: 0.7;
+             color: var(--primary-green);
+         }
+         .advice-card .location-text {
+             font-size: 0.9em;
+             color: var(--light-text);
+         }
+         .advice-card .error-text {
+             color: #dc3545; /* Bootstrap danger color */
+         }
+
+        /* Loading Spinner */
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px; /* Ensure spinner is visible */
+            padding: 2rem;
+        }
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: var(--primary-green);
+        }
+
+        /* Utility */
+        .icon { /* Class for Lucide icons */
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            stroke-width: 2;
+            vertical-align: middle;
+        }
+        .icon-lg {
+             width: 1.5em;
+            height: 1.5em;
+        }
+         .icon-sm {
+             width: 0.9em;
+            height: 0.9em;
+         }
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+            <div class="container">
+                <router-link class="navbar-brand d-flex align-items-center" to="/">
+                    <img src="https://placehold.co/30x30/28a745/ffffff?text=🌿" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
+                    <span class="brand-text">Smart Grower</span>
+                </router-link>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <router-link to="/" class="nav-link" active-class="active" exact>Home</router-link>
+                        </li>
+                        <!-- Add other nav links if needed -->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <router-view v-slot="{ Component }">
+                <transition name="fade" mode="out-in">
+                    <component :is="Component" />
+                </transition>
+            </router-view>
+        </main>
+
+        <footer class="footer text-center mt-auto">
+            <div class="container">
+                <span>© {{ new Date().getFullYear() }} Smart Plant Grower. All rights reserved. Built with Vue & <a href="https://perenual.com" target="_blank" rel="noopener">Perenual API</a>.</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <!-- Vue Router 4 -->
+    <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.prod.js"></script>
+    <!-- Vuex 4 -->
+    <script src="https://unpkg.com/vuex@4/dist/vuex.global.prod.js"></script>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        const { createApp, defineComponent } = Vue;
+        const { createRouter, createWebHashHistory } = VueRouter;
+        const { createStore } = Vuex;
+
+        // --- Configuration ---
+        // IMPORTANT: Replace with your actual Perenual API Key
+        // In a real production app, NEVER expose this directly in frontend code.
+        // Use a backend proxy or serverless function to hide the key.
+        const PERENUAL_API_KEY = 'sk-uDsf67eff8c4e227b9604'; // <--- REPLACE THIS! Example: 'sk-a1b2c3d4e5f6a7b8c9d0'
+
+        if (PERENUAL_API_KEY === 'sk-uDsf67eff8c4e227b9604') {
+             console.warn("Please replace 'sk-xxxx' with your actual Perenual API key in the script section.");
+             // Optionally display a persistent warning on the page itself
+        }
+
+        // --- API Service ---
+        const ApiService = {
+            baseURL: 'https://perenual.com/api',
+
+            async searchPlants(query) {
+                if (!PERENUAL_API_KEY || PERENUAL_API_KEY === 'sk-xxxx') throw new Error("API Key not configured.");
+                const response = await fetch(`${this.baseURL}/species-list?key=${PERENUAL_API_KEY}&q=${encodeURIComponent(query)}`);
+                if (!response.ok) {
+                    throw new Error(`API Error (${response.status}): ${response.statusText}`);
+                }
+                const data = await response.json();
+                // Filter out results without a common name and limit results
+                return data.data
+                           .filter(plant => plant.common_name && plant.common_name.trim() !== '')
+                           .slice(0, 10); // Limit to 10 results
+            },
+
+            async getPlantDetails(speciesId) {
+                if (!PERENUAL_API_KEY || PERENUAL_API_KEY === 'sk-xxxx') throw new Error("API Key not configured.");
+                const response = await fetch(`${this.baseURL}/species/details/${speciesId}?key=${PERENUAL_API_KEY}`);
+                 if (!response.ok) {
+                    if (response.status === 429) { // Too Many Requests
+                         throw new Error(`API Error (${response.status}): Rate limit exceeded. Please wait and try again.`);
+                    }
+                    throw new Error(`API Error (${response.status}): ${response.statusText}`);
+                }
+                return await response.json();
+            },
+
+            async getCareGuide(speciesId) {
+                if (!PERENUAL_API_KEY || PERENUAL_API_KEY === 'sk-xxxx') throw new Error("API Key not configured.");
+                // Note: Care guide might be empty or require specific subscription level
+                const response = await fetch(`${this.baseURL}/species-care-guide-list?key=${PERENUAL_API_KEY}&species_id=${speciesId}`);
+                 if (!response.ok) {
+                     if (response.status === 429) { // Too Many Requests
+                         throw new Error(`API Error (${response.status}): Rate limit exceeded. Please wait and try again.`);
+                    }
+                     // Don't throw for 404 on care guide, just return empty
+                     if (response.status === 404) return { data: [] };
+                    throw new Error(`API Error (${response.status}): ${response.statusText}`);
+                }
+                 const data = await response.json();
+                // The care guide data is often nested under 'data' and then 'section'
+                return data.data || [];
+            },
+
+             // Simulates fetching local advice based on location (placeholder)
+            async getLocalAdvice(plantId, lat, lon) {
+                console.log(`API: Simulating local advice fetch for plant ${plantId} at ${lat}, ${lon}`);
+                await new Promise(resolve => setTimeout(resolve, 400)); // Simulate network delay
+
+                // In a real app: Call OpenWeatherMap or similar API with lat/lon
+                // Get current weather (temp, rain, frost risk)
+                // Combine with general plant needs (from plant data) to generate advice
+
+                let advice = [];
+                const simulatedTemp = 25; // Example Celsius
+                 const plantName = store.state.currentPlant?.common_name || 'this plant';
+
+                 advice.push(`General advice for ${plantName} in your area (${lat.toFixed(2)}, ${lon.toFixed(2)}):`);
+
+                if (simulatedTemp > 30) {
+                    advice.push("☀️ Weather Alert: It's quite warm. Ensure consistent watering, especially during peak sun hours. Consider afternoon shade if possible.");
+                } else if (simulatedTemp < 10) {
+                     advice.push("❄️ Weather Alert: Cooler temperatures detected. Protect from potential frost if applicable for this plant.");
+                } else {
+                    advice.push("☁️ Weather seems moderate. Monitor soil moisture before watering.");
+                }
+                 advice.push("Always check local forecasts for sudden changes.");
+                return advice;
+            }
+        };
+
+        // --- Vuex Store ---
+        const store = createStore({
+            state() {
+                return {
+                    apiKeyStatus: PERENUAL_API_KEY && PERENUAL_API_KEY !== 'sk-xxxx' ? 'ok' : 'missing',
+                    searchResults: [],
+                    currentPlant: null, // Will hold combined details + care info
+                    isLoading: false,
+                    error: null, // Can be string or object { type: 'search'/'details'/'location'/'api', message: '...' }
+                    userLocation: null, // { latitude: number, longitude: number }
+                    localAdvice: [],
+                    locationError: null // Specific error message for geolocation
+                }
+            },
+            mutations: {
+                SET_API_KEY_STATUS(state, status) { state.apiKeyStatus = status; },
+                SET_SEARCH_RESULTS(state, results) { state.searchResults = results; },
+                SET_CURRENT_PLANT(state, plantData) { state.currentPlant = plantData; },
+                SET_LOADING(state, isLoading) { state.isLoading = isLoading; },
+                SET_ERROR(state, error) { // error can be null, string, or { type, message }
+                    if (error && typeof error === 'string') {
+                        state.error = { type: 'general', message: error };
+                    } else {
+                        state.error = error; // Set to null or the error object
+                    }
+                     // Clear location error if general error is cleared
+                     if (error === null) state.locationError = null;
+                 },
+                 SET_USER_LOCATION(state, location) {
+                    state.userLocation = location;
+                    state.locationError = null; // Clear location error on success
+                },
+                 SET_LOCAL_ADVICE(state, advice) { state.localAdvice = advice; },
+                 SET_LOCATION_ERROR(state, message) {
+                     state.locationError = message;
+                     state.userLocation = null; // Clear location data on error
+                 },
+                CLEAR_PLANT_DATA(state) {
+                    state.currentPlant = null;
+                    state.localAdvice = [];
+                    // Don't clear general error here, might be relevant (e.g., API key error)
+                },
+                CLEAR_SEARCH(state) {
+                    state.searchResults = [];
+                    state.error = null; // Clear previous search errors
+                }
+            },
+            actions: {
+                 // Check API Key validity on startup (basic check)
+                 checkApiKey({ commit }) {
+                    if (!PERENUAL_API_KEY || PERENUAL_API_KEY === 'sk-xxxx') {
+                        commit('SET_API_KEY_STATUS', 'missing');
+                        commit('SET_ERROR', { type: 'api', message: 'Perenual API Key is missing or invalid. Please configure it in the script.' });
+                    } else {
+                        commit('SET_API_KEY_STATUS', 'ok');
+                         commit('SET_ERROR', null); // Clear potential previous API key error
+                    }
+                 },
+
+                async searchPlant({ commit }, query) {
+                    commit('CLEAR_SEARCH');
+                    commit('SET_LOADING', true);
+                    try {
+                         if (store.state.apiKeyStatus !== 'ok') {
+                             throw new Error('API Key not configured.');
+                         }
+                        const results = await ApiService.searchPlants(query);
+                        commit('SET_SEARCH_RESULTS', results);
+                    } catch (err) {
+                        console.error("Search Error:", err);
+                        commit('SET_ERROR', { type: 'search', message: `Search failed: ${err.message}` });
+                        commit('SET_SEARCH_RESULTS', []); // Ensure results are empty on error
+                    } finally {
+                        commit('SET_LOADING', false);
+                    }
+                },
+
+                async fetchPlantDetails({ commit, dispatch, state }, speciesId) {
+                    commit('CLEAR_PLANT_DATA');
+                    commit('SET_LOADING', true);
+                     commit('SET_ERROR', null); // Clear previous detail errors
+                    try {
+                         if (store.state.apiKeyStatus !== 'ok') {
+                             throw new Error('API Key not configured.');
+                         }
+                        // Fetch details and care guide in parallel
+                        const [details, careGuideData] = await Promise.all([
+                            ApiService.getPlantDetails(speciesId),
+                            ApiService.getCareGuide(speciesId)
+                        ]);
+
+                        // Combine data - Prioritize details, supplement with care guide
+                        const combinedPlant = {
+                            id: details.id,
+                            common_name: details.common_name || 'N/A',
+                            scientific_name: details.scientific_name?.join(', ') || 'N/A',
+                            other_name: details.other_name?.join(', ') || '',
+                            description: details.description || 'No description available.',
+                            imageUrl: details.default_image?.regular_url || `https://placehold.co/600x400/cccccc/ffffff?text=${details.common_name || 'Plant'}`,
+                            needs: {},
+                            roadmap: []
+                        };
+
+                        // Process Care Guide data for Needs and Roadmap
+                        const needsMap = {};
+                        const roadmapSteps = [];
+
+                        if (careGuideData && Array.isArray(careGuideData)) {
+                            careGuideData.forEach(item => {
+                                if (item.section && Array.isArray(item.description)) {
+                                    const sectionTitle = item.section.toLowerCase();
+                                    const sectionDetails = item.description.map(d => d.substring.trim()).join(' ');
+
+                                    // Map to Needs
+                                    if (sectionTitle.includes('watering')) needsMap.watering = sectionDetails;
+                                    else if (sectionTitle.includes('sunlight')) needsMap.light = sectionDetails;
+                                    else if (sectionTitle.includes('pruning')) needsMap.pruning = sectionDetails; // Example, adjust as needed
+                                    else if (sectionTitle.includes('soil')) needsMap.soil = sectionDetails;
+                                    // Add more mappings based on Perenual's care guide sections
+
+                                    // Map to Roadmap (Simple example: each section is a step)
+                                     let icon = 'check-circle'; // default
+                                     if (sectionTitle.includes('watering')) icon = 'droplets';
+                                     else if (sectionTitle.includes('sunlight')) icon = 'sun';
+                                     else if (sectionTitle.includes('soil')) icon = 'layers';
+                                     else if (sectionTitle.includes('pruning')) icon = 'scissors';
+
+                                    roadmapSteps.push({
+                                        stage: item.section, // Use original title for stage name
+                                        details: sectionDetails,
+                                        icon: icon // Use Lucide icon names
+                                    });
+                                }
+                            });
+                        }
+
+                        // Add other details that might be useful for 'Needs' if not in care guide
+                        needsMap.temperature = details.hardiness ? `USDA Zones: ${details.hardiness.min} - ${details.hardiness.max}` : 'Info unavailable';
+                         // Add more fallbacks from details if needed
+
+                        combinedPlant.needs = needsMap;
+                        combinedPlant.roadmap = roadmapSteps.length > 0 ? roadmapSteps : [{ stage: 'General Care', details: 'Follow basic needs. Specific roadmap steps not available from API.', icon: 'info'}]; // Provide fallback
+
+                        commit('SET_CURRENT_PLANT', combinedPlant);
+
+                        // Fetch local advice if location is available
+                        if (state.userLocation) {
+                            dispatch('fetchLocalAdvice', combinedPlant.id);
+                        }
+
+                    } catch (err) {
+                        console.error("Fetch Details Error:", err);
+                        commit('SET_ERROR', { type: 'details', message: `Failed to load plant details: ${err.message}` });
+                        commit('SET_CURRENT_PLANT', null);
+                    } finally {
+                         // Only turn off loading if location isn't available or advice fetch isn't triggered here
+                         if (!state.userLocation || state.localAdvice.length > 0 || state.error?.type === 'details') {
+                            commit('SET_LOADING', false);
+                         }
+                    }
+                },
+
+                getUserLocation({ commit }) {
+                     commit('SET_LOCATION_ERROR', null); // Clear previous errors
+                    if (!navigator.geolocation) {
+                        console.warn('Geolocation is not supported by this browser.');
+                         commit('SET_LOCATION_ERROR', 'Geolocation is not supported by your browser.');
+                        return;
+                    }
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const location = {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            };
+                            console.log("Location obtained:", location);
+                            commit('SET_USER_LOCATION', location);
+                        },
+                        (error) => {
+                            console.error("Geolocation Error:", error);
+                            let message = 'Could not get location. ';
+                            switch(error.code) {
+                                case error.PERMISSION_DENIED:
+                                    message += 'Permission denied. Please enable location access in your browser settings.';
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    message += 'Location information is unavailable.';
+                                    break;
+                                case error.TIMEOUT:
+                                    message += 'The request to get user location timed out.';
+                                    break;
+                                default:
+                                     message += 'An unknown error occurred.';
+                                    break;
+                            }
+                             commit('SET_LOCATION_ERROR', message);
+                        },
+                        { timeout: 10000 } // Add a timeout
+                    );
+                },
+
+                async fetchLocalAdvice({ commit, state }, plantId) {
+                    if (!state.userLocation || !plantId) {
+                        console.log("Skipping local advice fetch: No location or plant ID.");
+                        commit('SET_LOADING', false); // Ensure loading finishes if this was the last step
+                        return;
+                    }
+                     // Don't set loading here if details are still loading, let the main fetch control it.
+                     // If called independently, you might need: commit('SET_LOADING', true);
+                    commit('SET_LOCAL_ADVICE', []);
+                    try {
+                        const advice = await ApiService.getLocalAdvice(plantId, state.userLocation.latitude, state.userLocation.longitude);
+                        commit('SET_LOCAL_ADVICE', advice);
+                    } catch (err) {
+                        console.error("Fetch Local Advice Error:", err);
+                        // Append to existing error or set new one
+                        const currentError = state.error?.message || '';
+                        commit('SET_ERROR', { type: 'advice', message: currentError + ' Failed to fetch local advice.' });
+                    } finally {
+                        commit('SET_LOADING', false); // Turn off loading after advice fetch completes or fails
+                    }
+                }
+            },
+            getters: {
+                getPlantById: (state) => (id) => {
+                    // In a real app with many plants loaded, you might search state.allPlants here
+                    // For now, it just returns the single currentPlant if the ID matches
+                    return state.currentPlant && state.currentPlant.id === id ? state.currentPlant : null;
+                },
+                 hasApiKeyError: (state) => state.error?.type === 'api',
+                 hasSearchError: (state) => state.error?.type === 'search',
+                 hasDetailsError: (state) => state.error?.type === 'details',
+            }
+        });
+
+        // --- Vue Components ---
+
+        // Home Component (Landing Page)
+        const Home = defineComponent({
+            template: `
+                <div>
+                    <div class="search-hero">
+                        <div class="container">
+                            <h1 class="display-5 mb-3">Grow Smarter, Not Harder</h1>
+                            <p class="lead mb-4">Find detailed growing guides for your favorite plants. Just enter a name below to start.</p>
+                            <form @submit.prevent="performSearch" class="row justify-content-center">
+                                <div class="col-md-8 col-lg-6">
+                                    <div class="input-group input-group-lg mb-3 shadow-sm">
+                                        <input type="text" v-model="searchQuery" class="form-control" placeholder="E.g., Tomato, Basil, Rose..." aria-label="Plant name" required :disabled="isLoading || !apiKeyOk">
+                                        <button class="btn btn-success px-4" type="submit" :disabled="isLoading || !searchQuery.trim() || !apiKeyOk">
+                                            <span v-if="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            <span v-else>
+                                                <i data-lucide="search" class="icon icon-sm me-1"></i> Search
+                                            </span>
+                                        </button>
+                                    </div>
+                                     <p v-if="!apiKeyOk" class="text-danger small mt-2">
+                                        <i data-lucide="alert-triangle" class="icon icon-sm me-1"></i> API Key not configured. Please check console.
+                                     </p>
+                                </div>
+                            </form>
+                            <div v-if="searchError" class="alert alert-danger mt-3 col-md-6 mx-auto">{{ searchError }}</div>
+                        </div>
+                    </div>
+
+                    <div class="container mt-5 mb-5 search-results-container">
+                        <div v-if="isLoading && searchResults.length === 0" class="spinner-container">
+                             <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div v-else-if="!isLoading && submittedSearch && searchResults.length > 0">
+                            <h2 class="mb-4 text-center h4">Search Results:</h2>
+                            <div class="list-group">
+                                 <router-link v-for="plant in searchResults" :key="plant.id" :to="'/plant/' + plant.id" class="list-group-item list-group-item-action mb-2 shadow-sm">
+                                     <div class="d-flex w-100 justify-content-between">
+                                         <h5 class="mb-1">{{ plant.common_name }}</h5>
+                                         <small class="text-muted">{{ plant.scientific_name ? plant.scientific_name[0] : '' }}</small>
+                                     </div>
+                                     <p v-if="plant.cycle" class="mb-1 small text-muted">Cycle: {{ plant.cycle }}</p>
+                                     <!-- Add more snippets if available in search result -->
+                                 </router-link>
+                            </div>
+                        </div>
+                         <div v-else-if="!isLoading && submittedSearch && searchResults.length === 0 && !searchError" class="text-center text-muted mt-4">
+                             <i data-lucide="info" class="icon icon-lg mb-2"></i>
+                            <p>No plants found matching your search term "{{ submittedQuery }}". Try a different name?</p>
+                        </div>
+                         <div v-else-if="!isLoading && !submittedSearch && !searchError && apiKeyOk" class="text-center text-muted mt-4">
+                            <p>Enter a plant name above to find its growing guide.</p>
+                         </div>
+                    </div>
+                </div>
+            `,
+            data() {
+                return {
+                    searchQuery: '',
+                    submittedSearch: false,
+                    submittedQuery: '' // Store the query that was submitted
+                 };
+            },
+            computed: {
+                isLoading() { return this.$store.state.isLoading; },
+                searchResults() { return this.$store.state.searchResults; },
+                searchError() { return this.$store.state.error?.type === 'search' ? this.$store.state.error.message : null; },
+                apiKeyOk() { return this.$store.state.apiKeyStatus === 'ok'; }
+            },
+            methods: {
+                performSearch() {
+                    if (this.searchQuery.trim() && this.apiKeyOk) {
+                        this.submittedSearch = true;
+                        this.submittedQuery = this.searchQuery.trim(); // Store the actual query
+                        this.$store.dispatch('searchPlant', this.searchQuery.trim());
+                    }
+                },
+                 renderIcons() {
+                    this.$nextTick(() => {
+                        lucide.createIcons();
+                    });
+                }
+            },
+             mounted() {
+                this.$store.commit('CLEAR_SEARCH'); // Clear previous results/errors on mount
+                this.submittedSearch = false;
+                this.submittedQuery = '';
+                this.renderIcons(); // Initial render
+            },
+            updated() {
+                this.renderIcons(); // Re-render icons if component updates
+            }
+        });
+
+        // Plant Guide Component
+        const PlantGuide = defineComponent({
+            template: `
+                <div class="container my-5 plant-guide">
+                     <div v-if="isLoading && !plant" class="spinner-container">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading plant details...</span>
+                        </div>
+                    </div>
+
+                     <div v-else-if="detailsError && !isLoading" class="alert alert-danger text-center">
+                         <i data-lucide="alert-circle" class="icon icon-lg me-2"></i>
+                        {{ detailsError }} <br>
+                         <router-link to="/" class="btn btn-sm btn-outline-danger mt-2">
+                             <i data-lucide="arrow-left" class="icon icon-sm me-1"></i> Back to Search
+                         </router-link>
+                    </div>
+
+                    <div v-else-if="plant">
+                        <h1 class="mb-4 text-center display-6">{{ plant.common_name }}</h1>
+                        <p v-if="plant.scientific_name" class="text-center text-muted fst-italic mb-4">({{ plant.scientific_name }})</p>
+
+                        <div class="row">
+                            <!-- Left Column: Image & Needs -->
+                            <div class="col-lg-5 mb-4">
+                                <img :src="plant.imageUrl"
+                                     :alt="'Image of ' + plant.common_name"
+                                     class="img-fluid main-image"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/cccccc/ffffff?text=Image+Not+Available';">
+
+                                <div class="info-card needs-card">
+                                    <h4><i data-lucide="list-checks" class="icon card-title-icon"></i>Basic Needs</h4>
+                                    <ul class="list-unstyled needs-list">
+                                        <li v-if="plant.needs?.light"><i data-lucide="sun" class="icon"></i><strong>Light:</strong><span>{{ plant.needs.light }}</span></li>
+                                        <li v-if="plant.needs?.watering"><i data-lucide="droplets" class="icon"></i><strong>Watering:</strong><span>{{ plant.needs.watering }}</span></li>
+                                        <li v-if="plant.needs?.soil"><i data-lucide="layers" class="icon"></i><strong>Soil:</strong><span>{{ plant.needs.soil }}</span></li>
+                                        <li v-if="plant.needs?.temperature"><i data-lucide="thermometer" class="icon"></i><strong>Temp/Zone:</strong><span>{{ plant.needs.temperature }}</span></li>
+                                        <li v-if="plant.needs?.pruning"><i data-lucide="scissors" class="icon"></i><strong>Pruning:</strong><span>{{ plant.needs.pruning }}</span></li>
+                                         <!-- Add more needs as available -->
+                                        <li v-if="Object.keys(plant.needs || {}).length === 0" class="text-muted"><i data-lucide="info" class="icon"></i>No specific needs data available from API.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Description, Roadmap, Local Advice -->
+                            <div class="col-lg-7">
+                                <div class="info-card description-card mb-4">
+                                    <h4><i data-lucide="info" class="icon card-title-icon"></i>Description</h4>
+                                    <p>{{ plant.description }}</p>
+                                    <p v-if="plant.other_name" class="small text-muted mt-3">Also known as: {{ plant.other_name }}</p>
+                                </div>
+
+                                <div class="mb-4">
+                                    <h4 class="mb-3"><i data-lucide="map-signs" class="icon card-title-icon"></i>Growing Roadmap</h4>
+                                    <div v-if="plant.roadmap && plant.roadmap.length > 0">
+                                        <div v-for="(step, index) in plant.roadmap" :key="index" class="roadmap-card">
+                                            <div class="roadmap-icon">
+                                                 <i :data-lucide="step.icon || 'check-circle'" class="icon"></i>
+                                            </div>
+                                            <div class="roadmap-content">
+                                                <h5>{{ step.stage }}</h5>
+                                                <p>{{ step.details }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p v-else class="text-muted ms-1">No detailed roadmap available from API.</p>
+                                </div>
+
+                                <div class="info-card advice-card">
+                                    <h4>
+                                        <i data-lucide="map-pin" class="icon card-title-icon"></i>Local Advice
+                                        <span v-if="userLocation" class="location-text ms-2">({{ userLocation.latitude.toFixed(2) }}, {{ userLocation.longitude.toFixed(2) }})</span>
+                                        <span v-else-if="!locationError" class="location-text ms-2">(Location not available)</span>
+                                         <span v-else class="location-text ms-2 text-warning">(Location Error)</span>
+                                     </h4>
+
+                                     <div v-if="isLoading && userLocation && localAdvice.length === 0 && !locationError" class="text-center text-muted small py-3">
+                                         <div class="spinner-border spinner-border-sm text-secondary me-2" role="status"></div>
+                                         Fetching local advice...
+                                     </div>
+                                     <div v-else-if="localAdvice.length > 0">
+                                         <ul>
+                                             <li v-for="(advice, index) in localAdvice" :key="index">
+                                                 <i data-lucide="cloud-sun" class="icon"></i>
+                                                 <span>{{ advice }}</span>
+                                             </li>
+                                         </ul>
+                                     </div>
+                                     <p v-else-if="locationError" class="error-text">
+                                         <i data-lucide="alert-triangle" class="icon icon-sm me-1"></i>
+                                         {{ locationError }} Try reloading or check browser settings.
+                                     </p>
+                                      <p v-else-if="!userLocation && !isLoading" class="text-muted">
+                                         <i data-lucide="navigation" class="icon icon-sm me-1"></i>
+                                         Enable location services in your browser to get tailored advice for your area. You might need to grant permission.
+                                     </p>
+                                     <p v-else-if="!isLoading" class="text-muted">No specific local advice available at this time.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="text-center mt-4">
+                             <router-link to="/" class="btn btn-outline-secondary">
+                                <i data-lucide="arrow-left" class="icon icon-sm me-1"></i>
+                                Back to Search
+                             </router-link>
+                         </div>
+                    </div>
+
+                     <div v-else-if="!isLoading && !detailsError" class="alert alert-warning text-center">
+                        <i data-lucide="help-circle" class="icon icon-lg me-2"></i>
+                        Plant data could not be loaded or found.
+                        <br>
+                         <router-link to="/" class="btn btn-sm btn-outline-warning mt-2">
+                              <i data-lucide="arrow-left" class="icon icon-sm me-1"></i> Back to Search
+                         </router-link>
+                    </div>
+                </div>
+            `,
+            computed: {
+                plant() { return this.$store.state.currentPlant; },
+                isLoading() { return this.$store.state.isLoading; },
+                // Use getter for specific error type
+                detailsError() { return this.$store.getters.hasDetailsError ? this.$store.state.error.message : null; },
+                 // Include API key error as a details error potentially
+                 apiKeyError() { return this.$store.getters.hasApiKeyError ? this.$store.state.error.message : null; },
+                userLocation() { return this.$store.state.userLocation; },
+                localAdvice() { return this.$store.state.localAdvice; },
+                locationError() { return this.$store.state.locationError; }
+            },
+            methods: {
+                fetchData() {
+                    const plantId = parseInt(this.$route.params.id); // Perenual uses integer IDs
+                    if (plantId && !isNaN(plantId)) {
+                         this.$store.dispatch('fetchPlantDetails', plantId);
+                    } else {
+                        console.error("Invalid Plant ID:", this.$route.params.id);
+                        this.$store.commit('SET_ERROR', { type: 'details', message: 'Invalid Plant ID provided.' });
+                        this.$store.commit('CLEAR_PLANT_DATA');
+                        this.$store.commit('SET_LOADING', false);
+                    }
+                },
+                renderIcons() {
+                    // Use nextTick to ensure the DOM is updated before trying to render icons
+                    this.$nextTick(() => {
+                         try {
+                            lucide.createIcons();
+                         } catch (e) {
+                             console.error("Lucide icon rendering error:", e);
+                         }
+                    });
+                }
+            },
+            created() {
+                this.fetchData();
+            },
+             mounted() {
+                this.renderIcons(); // Initial render
+            },
+            updated() {
+                this.renderIcons(); // Re-render if component updates (e.g., data loaded)
+            },
+            watch: {
+                '$route.params.id'(newId, oldId) {
+                    if (newId && newId !== oldId) {
+                        this.fetchData();
+                    }
+                }
+            }
+        });
+
+        // --- Vue Router ---
+        const routes = [
+            { path: '/', component: Home, name: 'home' },
+            // Ensure ID is treated as a parameter
+            { path: '/plant/:id', component: PlantGuide, name: 'plant-guide', props: true } // props: true can pass route params as props if needed, though we use store here primarily
+        ];
+
+        const router = createRouter({
+            history: createWebHashHistory(), // Simple hash history for CDN deployment
+            routes,
+             scrollBehavior(to, from, savedPosition) {
+                // Always scroll to top on new route navigation
+                return { top: 0 };
+            }
+        });
+
+        // --- Vue App Initialization ---
+        const app = createApp({
+             mounted() {
+                 console.log("App mounted. Checking API key and requesting location...");
+                 // Check API key status on startup
+                 this.$store.dispatch('checkApiKey');
+                // Attempt to get user location on app load
+                this.$store.dispatch('getUserLocation');
+
+                 // Initial icon render for static icons in the main template (like footer)
+                 this.$nextTick(() => {
+                     lucide.createIcons();
+                 });
+            },
+            // Add computed property for footer year
+            computed: {
+                currentYear() {
+                    return new Date().getFullYear();
+                }
+            }
+        });
+
+        app.use(router);
+        app.use(store);
+        app.mount('#app');
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
